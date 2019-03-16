@@ -19,6 +19,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Accelerometer"
+            android:label="@string/title_activity_accelerometer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Magnetometer"
+            android:label="@string/title_activity_magnetometer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Light"
+            android:label="@string/title_activity_light"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Proximity"
+            android:label="@string/title_activity_proximity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
