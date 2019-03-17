@@ -1,5 +1,6 @@
 package com.example.bck.sensorsreader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,9 @@ import android.view.MenuItem;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    Toolbar toolbar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +36,13 @@ public class Home extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -80,18 +84,27 @@ public class Home extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch(id) {
+            case R.id.nav_home:
+                Intent homeIntent = new Intent(Home.this, Home.class);
+                startActivity(homeIntent);
+                break;
+            case R.id.nav_accelerometer:
+                Intent accelerometerIntent = new Intent(Home.this, Accelerometer.class);
+                startActivity(accelerometerIntent);
+                break;
+            case R.id.nav_magnetometer:
+                Intent magnetometerIntent = new Intent(Home.this, Magnetometer.class);
+                startActivity(magnetometerIntent);
+                break;
+            case R.id.nav_light:
+                Intent lightIntent = new Intent(Home.this, Light.class);
+                startActivity(lightIntent);
+                break;
+            case R.id.nav_proximity:
+                Intent proximityIntent = new Intent(Home.this, Proximity.class);
+                startActivity(proximityIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

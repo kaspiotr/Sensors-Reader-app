@@ -8,4 +8,17 @@
     tools:context=".Light"
     tools:showIn="@layout/app_bar_light">
 
+    <TextView
+        android:id="@+id/light_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="150dp"
+        android:text="@string/light"
+        android:gravity="center"
+        tools:ignore="MissingConstraints"
+        tools:laysout_editor_absoluteX="162dp"
+        tools:laysout_editor_absoluteY="246dp" />
+
 </android.support.constraint.ConstraintLayout>

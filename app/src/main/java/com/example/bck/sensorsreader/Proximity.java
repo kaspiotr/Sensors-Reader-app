@@ -1,5 +1,6 @@
 package com.example.bck.sensorsreader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -55,7 +56,7 @@ public class Proximity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.proximity, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -80,18 +81,27 @@ public class Proximity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch(id) {
+            case R.id.nav_home:
+                Intent homeIntent = new Intent(Proximity    .this, Home.class);
+                startActivity(homeIntent);
+                break;
+            case R.id.nav_accelerometer:
+                Intent accelerometerIntent = new Intent(Proximity.this, Accelerometer.class);
+                startActivity(accelerometerIntent);
+                break;
+            case R.id.nav_magnetometer:
+                Intent magnetometerIntent = new Intent(Proximity.this, Magnetometer.class);
+                startActivity(magnetometerIntent);
+                break;
+            case R.id.nav_light:
+                Intent lightIntent = new Intent(Proximity.this, Light.class);
+                startActivity(lightIntent);
+                break;
+            case R.id.nav_proximity:
+                Intent proximityIntent = new Intent(Proximity.this, Proximity.class);
+                startActivity(proximityIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
