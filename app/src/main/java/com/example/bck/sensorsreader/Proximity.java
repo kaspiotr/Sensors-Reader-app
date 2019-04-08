@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -19,6 +20,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.util.Date;
 
 
 public class Proximity extends AppCompatActivity
@@ -135,16 +138,14 @@ public class Proximity extends AppCompatActivity
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType()==Sensor.TYPE_PROXIMITY)
-        {
+        if(event.sensor.getType()==Sensor.TYPE_PROXIMITY) {
+            long date = (new Date()).getTime() + (event.timestamp - System.nanoTime()) / 1000000L;
             StringBuffer buffer = new StringBuffer();
-            for (Float value: event.values) {
-                buffer.append("timestamp: ")
-                        .append(event.timestamp)
-                        .append(" value: ")
-                        .append(value)
-                        .append("\n");
-            }
+            buffer.append(new Date(date))
+                    .append("\n")
+                    .append("value: ")
+                    .append(event.values[0])
+                    .append("\n");
             TextView textView = findViewById(R.id.proximity_text_view);
             textView.setText(buffer);
         }
