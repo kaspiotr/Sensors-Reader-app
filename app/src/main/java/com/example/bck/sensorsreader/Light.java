@@ -1,16 +1,18 @@
 package com.example.bck.sensorsreader;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,15 +20,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.edgent.function.Supplier;
 
 import java.util.Date;
 
+
 public class Light extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener, Supplier<String> {
 
     private Sensor defaultSensor;
     private SensorManager sensorManager;
+    private float ligthValue;
 
 
     @Override
@@ -53,10 +62,6 @@ public class Light extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        defaultSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(this, defaultSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
 
     }
@@ -99,7 +104,7 @@ public class Light extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch(id) {
+        switch (id) {
             case R.id.nav_home:
                 Intent homeIntent = new Intent(Light.this, Home.class);
                 startActivity(homeIntent);
@@ -129,7 +134,8 @@ public class Light extends AppCompatActivity
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType()==Sensor.TYPE_LIGHT) {
+        this.ligthValue = event.values[0];
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             long date = (new Date()).getTime() + (event.timestamp - System.nanoTime()) / 1000000L;
             StringBuffer buffer = new StringBuffer();
             buffer.append(new Date(date))
@@ -146,4 +152,68 @@ public class Light extends AppCompatActivity
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+    @Override
+    public String get() {
+        return Float.toString(ligthValue);
+    }
+
+    //LISTENERS
+    public void onManual(View view) {
+        Button button = (Button) view;
+
+        if (mService.ToggleManualStreamFlag()) {
+            button.setText("Stop");
+        } else {
+            button.setText("Start");
+        }
+    }
+
+    public void on5Second(View view) {
+        mService.Create5sMarker();
+        Toast.makeText(this, "Sent last 5s to server", Toast.LENGTH_SHORT).show();
+    }
+
+
+    //Service bindings
+    MqttSensorService mService;
+    boolean mBound = false;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, MqttSensorService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+
+
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            MqttSensorService.LocalBinder binder = (MqttSensorService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
+
