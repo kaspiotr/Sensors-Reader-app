@@ -97,8 +97,8 @@ public class MqttSensorService extends Service {
         MqttStreams mqtt5sStream = new MqttStreams(topology, () -> mqttConfig);
         MqttStreams mqttManualStream = new MqttStreams(topology, () -> mqttConfig);
 
-        mqtt5sStream.publish(bufferedStream, props.getProperty("5sTopic"), 0, false);
-        mqttManualStream.publish(manualStream, props.getProperty("manualTopic"), 0, false);
+        mqtt5sStream.publish(bufferedStream, props.getProperty("mqtt.5sBufferTopic"), 0, false);
+        mqttManualStream.publish(manualStream, props.getProperty("mqtt.manualTopic"), 0, false);
 
 
         this.mqttJob = dp.submit(topology);
