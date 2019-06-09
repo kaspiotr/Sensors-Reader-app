@@ -36,6 +36,7 @@ public class Light extends AppCompatActivity
     private Sensor defaultSensor;
     private SensorManager sensorManager;
     private float ligthValue;
+    private int id;
 
 
     @Override
@@ -215,5 +216,18 @@ public class Light extends AppCompatActivity
             mBound = false;
         }
     };
+
+    //CustomConfiguration
+    public void createNewConfiguration(View view) {
+        CustomButtonConfigurationPopup customButtonConfigurationPopup = new CustomButtonConfigurationPopup(this, view, this::customButtonClickListener);
+        id++;
+        customButtonConfigurationPopup.showWindow(id);
+    }
+
+
+    public void customButtonClickListener(MqttConfButton mqttConfButton) {
+        mService.handleCustomJob(mqttConfButton);
+        Toast.makeText(this, "Sent last " + mqttConfButton.getSeconds() + " seconds to server", Toast.LENGTH_SHORT).show();
+    }
 }
 

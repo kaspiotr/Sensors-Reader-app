@@ -21,6 +21,16 @@
         tools:laysout_editor_absoluteX="162dp"
         tools:laysout_editor_absoluteY="246dp" />
 
+    <LinearLayout
+        android:id="@+id/rootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/tag2"
         android:layout_width="wrap_content"
@@ -31,6 +41,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tag1"
         app:layout_constraintTop_toTopOf="@+id/tag1" />
+
+    <Button
+        android:id="@+id/owntag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="createNewConfiguration"
+        android:text="Create own tag"
+        app:layout_constraintEnd_toStartOf="@+id/tag2"
+        app:layout_constraintHorizontal_bias="0.201"
+        app:layout_constraintStart_toEndOf="@+id/tag1"
+        app:layout_constraintStart_toStartOf="@+id/tag1"
+        app:layout_constraintTop_toTopOf="@+id/tag2" />
 
     <Button
         android:id="@+id/tag1"
