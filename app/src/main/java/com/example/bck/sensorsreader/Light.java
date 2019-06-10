@@ -125,6 +125,10 @@ public class Light extends AppCompatActivity
                 Intent proximityIntent = new Intent(Light.this, Proximity.class);
                 startActivity(proximityIntent);
                 break;
+            case R.id.nav_config:
+                Intent configIntent = new Intent(Light.this, Config.class);
+                startActivity(configIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -112,6 +112,10 @@ public class Home extends AppCompatActivity
                 Intent proximityIntent = new Intent(Home.this, Proximity.class);
                 startActivity(proximityIntent);
                 break;
+            case R.id.nav_config:
+                Intent configIntent = new Intent(Home.this, Config.class);
+                startActivity(configIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
