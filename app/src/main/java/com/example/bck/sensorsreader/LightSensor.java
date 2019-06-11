@@ -8,14 +8,13 @@ import android.hardware.SensorManager;
 
 import org.apache.edgent.function.Supplier;
 
-public class LightSensor implements Supplier<Float>, SensorEventListener {
+public class LightSensor implements Supplier<Float>, SensorEventListener, ISensorRegister {
 
+    private final SensorManager sensorManager;
     private float lightValue;
 
     public LightSensor(Context ctx) {
-        SensorManager sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
@@ -31,5 +30,16 @@ public class LightSensor implements Supplier<Float>, SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    @Override
+    public void register() {
+        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    public void unregister() {
+        sensorManager.unregisterListener(this);
     }
 }

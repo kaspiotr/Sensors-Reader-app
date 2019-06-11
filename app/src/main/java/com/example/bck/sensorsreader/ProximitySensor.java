@@ -8,14 +8,13 @@ import android.hardware.SensorManager;
 
 import org.apache.edgent.function.Supplier;
 
-public class ProximitySensor implements Supplier<Float>, SensorEventListener {
+public class ProximitySensor implements Supplier<Float>, SensorEventListener, ISensorRegister {
 
+    private final SensorManager sensorManager;
     private float proximityValue;
 
     public ProximitySensor(Context ctx) {
-        SensorManager sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_FASTEST);
+         sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
@@ -31,5 +30,16 @@ public class ProximitySensor implements Supplier<Float>, SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    @Override
+    public void register() {
+        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    public void unregister() {
+        sensorManager.unregisterListener(this);
     }
 }

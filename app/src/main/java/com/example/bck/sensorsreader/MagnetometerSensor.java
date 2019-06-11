@@ -8,15 +8,16 @@ import android.hardware.SensorManager;
 
 import org.apache.edgent.function.Supplier;
 
-public class MagnetometerSensor implements Supplier<float[]>, SensorEventListener {
+public class MagnetometerSensor implements Supplier<float[]>, SensorEventListener, ISensorRegister {
 
+    private final SensorManager sensorManager;
     private float[] magnetometerValue;
 
     public MagnetometerSensor(Context ctx) {
-        SensorManager sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-        Sensor magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
+        register();
     }
+
 
     @Override
     public float[] get() {
@@ -30,6 +31,14 @@ public class MagnetometerSensor implements Supplier<float[]>, SensorEventListene
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
+    public void unregister() {
+        sensorManager.unregisterListener(this);
+    }
+
+    public void register() {
+        Sensor magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 }

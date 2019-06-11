@@ -40,6 +40,11 @@
             android:label="@string/title_activity_proximity"
         android:theme="@style/AppTheme.NoActionBar"></activity>
         <service android:name=".MqttSensorServiceCustom" android:exported="false"/>
+        <activity
+            android:name=".Config"
+            android:label="@string/title_activity_config"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <service android:name="MqttSensorService" android:exported="false"/>
     </application>
 
 </manifest>
