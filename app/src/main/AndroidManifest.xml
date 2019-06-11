@@ -39,7 +39,7 @@
             android:name=".Proximity"
             android:label="@string/title_activity_proximity"
         android:theme="@style/AppTheme.NoActionBar"></activity>
-        <service android:name="MqttSensorService" android:exported="false"/>
+        <service android:name=".MqttSensorServiceCustom" android:exported="false"/>
     </application>
 
 </manifest>

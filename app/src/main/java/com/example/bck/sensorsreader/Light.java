@@ -177,7 +177,7 @@ public class Light extends AppCompatActivity
 
 
     //Service bindings
-    MqttSensorService mService;
+    MqttSensorServiceCustom mService;
     boolean mBound = false;
 
 
@@ -185,7 +185,7 @@ public class Light extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         // Bind to LocalService
-        Intent intent = new Intent(this, MqttSensorService.class);
+        Intent intent = new Intent(this, MqttSensorServiceCustom.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -206,7 +206,7 @@ public class Light extends AppCompatActivity
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            MqttSensorService.LocalBinder binder = (MqttSensorService.LocalBinder) service;
+            MqttSensorServiceCustom.LocalBinder binder = (MqttSensorServiceCustom.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
         }

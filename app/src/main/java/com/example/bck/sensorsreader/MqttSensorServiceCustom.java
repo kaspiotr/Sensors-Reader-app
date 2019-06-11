@@ -23,22 +23,22 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class MqttSensorService extends Service {
+public class MqttSensorServiceCustom extends Service {
 
-    private Future<Job> mqttJob = null;
+    private Future<Job> customMqttJob = null;
     private EffectivelyFinalBooleanBox marker5s = new EffectivelyFinalBooleanBox(false);
     private EffectivelyFinalBooleanBox flagManual = new EffectivelyFinalBooleanBox(false);
-    private MqttConfig mqttConfig;
-    private Topology topology;
-    private DirectProvider dp;
-    private Properties props = new Properties();
+    private MqttConfig customMqttConfig;
+    private Topology customTopology;
+    private DirectProvider customDp;
+    private Properties customProps = new Properties();
 
     private Map<Integer, EffectivelyFinalBooleanBox> customButtons = new HashMap<>();
 
     @Override
     public void onDestroy() {
         try {
-            mqttJob.get().stateChange(Job.Action.CLOSE);
+            customMqttJob.get().stateChange(Job.Action.CLOSE);
         } catch (InterruptedException | ExecutionException | NullPointerException ignored) {
         }
 
@@ -63,26 +63,26 @@ public class MqttSensorService extends Service {
 
     private void createNewJob() throws IOException, ExecutionException, InterruptedException {
 
-        if (this.mqttJob != null && this.mqttJob.get().getCurrentState() == Job.State.RUNNING) {
+        if (this.customMqttJob != null && this.customMqttJob.get().getCurrentState() == Job.State.RUNNING) {
             Log.i("Mqtt", "Edgent is already running.");
             return;
         }
 
         Log.i("Mqtt", "No Edgent job is running. Starting new Edgent job.");
 
-        dp = new DirectProvider();
-        topology = dp.newTopology();
+        customDp = new DirectProvider();
+        customTopology = customDp.newTopology();
 
 
-        props.load(getBaseContext().getAssets().open("mqtt.properties"));
-        mqttConfig = MqttConfig.fromProperties(props);
+        customProps.load(getBaseContext().getAssets().open("mqtt.properties"));
+        customMqttConfig = MqttConfig.fromProperties(customProps);
 
 
-        TStream<String> manualStream = topology.poll(getSensorReadingsSupplier(), 1, TimeUnit.SECONDS)
+        TStream<String> manualStream = customTopology.poll(getSensorReadingsSupplier(), 1, TimeUnit.SECONDS)
                 .filter(x -> this.flagManual.notSoFinalBoolean)
                 .map(SensorReadings::toString);
 
-        TStream<String> bufferedStream = topology.poll(getSensorReadingsSupplier(), 100, TimeUnit.MILLISECONDS)
+        TStream<String> bufferedStream = customTopology.poll(getSensorReadingsSupplier(), 100, TimeUnit.MILLISECONDS)
                 .last(5, TimeUnit.SECONDS, readings -> 0)
                 .batch((readings, integer) -> {
                     List<SensorReadings> result = this.marker5s.notSoFinalBoolean ?
@@ -100,14 +100,14 @@ public class MqttSensorService extends Service {
                 });
 
 
-        MqttStreams mqtt5sStream = new MqttStreams(topology, () -> mqttConfig);
-        MqttStreams mqttManualStream = new MqttStreams(topology, () -> mqttConfig);
+        MqttStreams mqtt5sStream = new MqttStreams(customTopology, () -> customMqttConfig);
+        MqttStreams mqttManualStream = new MqttStreams(customTopology, () -> customMqttConfig);
 
-        mqtt5sStream.publish(bufferedStream, props.getProperty("mqtt.5sBufferTopic"), 0, false);
-        mqttManualStream.publish(manualStream, props.getProperty("mqtt.manualTopic"), 0, false);
+        mqtt5sStream.publish(bufferedStream, customProps.getProperty("mqtt.5sBufferTopic"), 0, false);
+        mqttManualStream.publish(manualStream, customProps.getProperty("mqtt.manualTopic"), 0, false);
 
 
-        this.mqttJob = dp.submit(topology);
+        this.customMqttJob = customDp.submit(customTopology);
     }
 
     //Sensor getters
@@ -128,8 +128,8 @@ public class MqttSensorService extends Service {
 
 
     class LocalBinder extends Binder {
-        MqttSensorService getService() {
-            return MqttSensorService.this;
+        MqttSensorServiceCustom getService() {
+            return MqttSensorServiceCustom.this;
         }
     }
 
@@ -158,7 +158,7 @@ public class MqttSensorService extends Service {
 
         } else {
             customButtons.put(mqttConfButton.getButtonId(), new EffectivelyFinalBooleanBox(true));
-            TStream<String> bufferedStream = topology.poll(getSensorReadingsSupplier(mqttConfButton), 100, TimeUnit.MILLISECONDS)
+            TStream<String> bufferedStream = customTopology.poll(getSensorReadingsSupplier(mqttConfButton), 100, TimeUnit.MILLISECONDS)
                     .last(mqttConfButton.getSeconds(), TimeUnit.SECONDS, readings -> 0)
                     .batch((readings, integer) -> {
 
@@ -177,12 +177,12 @@ public class MqttSensorService extends Service {
                         }
                         return sb.toString();
                     });
-            MqttStreams customStream = new MqttStreams(topology, () -> mqttConfig);
+            MqttStreams customStream = new MqttStreams(customTopology, () -> customMqttConfig);
 
-            customStream.publish(bufferedStream, props.getProperty("mqtt.customTopic"), 0, false);
+            customStream.publish(bufferedStream, customProps.getProperty("mqtt.customTopic"), 0, false);
 
 
-            this.mqttJob = dp.submit(topology);
+            this.customMqttJob = customDp.submit(customTopology);
         }
     }
 
