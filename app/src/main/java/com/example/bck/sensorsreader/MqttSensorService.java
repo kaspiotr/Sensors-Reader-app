@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.bck.sensorsreader.configuration.ApplicationConfig;
 import com.example.bck.sensorsreader.configuration.SensorConfig;
+import com.google.gson.Gson;
 
 import org.apache.edgent.connectors.mqtt.MqttConfig;
 import org.apache.edgent.connectors.mqtt.MqttStreams;
@@ -21,8 +22,6 @@ import org.apache.edgent.topology.Topology;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +37,7 @@ public class MqttSensorService extends Service {
     private AccelerometerSensor accelerometerSensor;
     private MagnetometerSensor magnetometerSensor;
     private ProximitySensor proximitySensor;
-    private final String configFilename = "config.cfg";
+    private final String configFilename = "config.json";
 
 
     @Override
@@ -62,13 +61,14 @@ public class MqttSensorService extends Service {
 
     private ApplicationConfig readConfigFromFile() {
         try {
+            int c;
             FileInputStream fis = getApplicationContext().openFileInput(configFilename);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            ApplicationConfig config = (ApplicationConfig) is.readObject();
-            is.close();
-            fis.close();
-            return config;
-        } catch (IOException | ClassNotFoundException e) {
+            String temp = "";
+            while ((c = fis.read()) != -1) {
+                temp = temp + Character.toString((char) c);
+            }
+            return new Gson().fromJson(temp, ApplicationConfig.class);
+        } catch (IOException e) {
             Log.w("Config", "Error reading config file falling back to default");
             e.printStackTrace();
             return ApplicationConfig.defaultConfig;
@@ -79,9 +79,7 @@ public class MqttSensorService extends Service {
     private void saveConfigToFile() {
         try {
             FileOutputStream fos = getApplicationContext().openFileOutput(configFilename, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(config);
-            os.close();
+            fos.write(new Gson().toJson(config).getBytes());
             fos.close();
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
