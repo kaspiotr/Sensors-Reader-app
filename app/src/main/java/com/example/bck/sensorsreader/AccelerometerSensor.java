@@ -15,6 +15,7 @@ public class AccelerometerSensor implements Supplier<float[]>, SensorEventListen
 
     public AccelerometerSensor(Context ctx) {
         sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
+        register();
     }
 
     @Override

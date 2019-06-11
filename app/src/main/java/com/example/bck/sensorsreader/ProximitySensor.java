@@ -15,6 +15,7 @@ public class ProximitySensor implements Supplier<Float>, SensorEventListener, IS
 
     public ProximitySensor(Context ctx) {
          sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
+         register();
     }
 
     @Override

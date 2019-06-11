@@ -46,11 +46,11 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        Intent mqttSensorServiceStartIntent = new Intent(this, MqttSensorServiceCustom.class);
+        Intent mqttSensorServiceStartIntentCustom = new Intent(this, MqttSensorServiceCustom.class);
+        startService(mqttSensorServiceStartIntentCustom);
+
+        Intent mqttSensorServiceStartIntent = new Intent(this, MqttSensorService.class);
         startService(mqttSensorServiceStartIntent);
-
-
-
     }
 
     @Override

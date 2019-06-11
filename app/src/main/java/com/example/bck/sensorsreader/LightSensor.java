@@ -15,6 +15,7 @@ public class LightSensor implements Supplier<Float>, SensorEventListener, ISenso
 
     public LightSensor(Context ctx) {
         sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
+        register();
     }
 
     @Override
