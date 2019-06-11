@@ -26,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class MqttSensorServiceCustom extends Service {
 
     private Future<Job> customMqttJob = null;
-    private EffectivelyFinalBooleanBox marker5s = new EffectivelyFinalBooleanBox(false);
-    private EffectivelyFinalBooleanBox flagManual = new EffectivelyFinalBooleanBox(false);
     private MqttConfig customMqttConfig;
     private Topology customTopology;
     private DirectProvider customDp;
@@ -62,7 +60,6 @@ public class MqttSensorServiceCustom extends Service {
 
 
     private void createNewJob() throws IOException, ExecutionException, InterruptedException {
-
         if (this.customMqttJob != null && this.customMqttJob.get().getCurrentState() == Job.State.RUNNING) {
             Log.i("Mqtt", "Edgent is already running.");
             return;
@@ -73,46 +70,10 @@ public class MqttSensorServiceCustom extends Service {
         customDp = new DirectProvider();
         customTopology = customDp.newTopology();
 
-
         customProps.load(getBaseContext().getAssets().open("mqtt.properties"));
         customMqttConfig = MqttConfig.fromProperties(customProps);
 
-
-        TStream<String> manualStream = customTopology.poll(getSensorReadingsSupplier(), 1, TimeUnit.SECONDS)
-                .filter(x -> this.flagManual.notSoFinalBoolean)
-                .map(SensorReadings::toString);
-
-        TStream<String> bufferedStream = customTopology.poll(getSensorReadingsSupplier(), 100, TimeUnit.MILLISECONDS)
-                .last(5, TimeUnit.SECONDS, readings -> 0)
-                .batch((readings, integer) -> {
-                    List<SensorReadings> result = this.marker5s.notSoFinalBoolean ?
-                            readings : new LinkedList<SensorReadings>();
-                    this.marker5s.notSoFinalBoolean = false;
-                    return result;
-                })
-                .filter(readings -> readings.size() > 0)
-                .map(readings -> {
-                    StringBuilder sb = new StringBuilder();
-                    for (SensorReadings reading : readings) {
-                        sb.append(reading.toString()).append("\n");
-                    }
-                    return sb.toString();
-                });
-
-
-        MqttStreams mqtt5sStream = new MqttStreams(customTopology, () -> customMqttConfig);
-        MqttStreams mqttManualStream = new MqttStreams(customTopology, () -> customMqttConfig);
-
-        mqtt5sStream.publish(bufferedStream, customProps.getProperty("mqtt.5sBufferTopic"), 0, false);
-        mqttManualStream.publish(manualStream, customProps.getProperty("mqtt.manualTopic"), 0, false);
-
-
         this.customMqttJob = customDp.submit(customTopology);
-    }
-
-    //Sensor getters
-    private SensorReader getSensorReadingsSupplier() {
-        return new SensorReader(this);
     }
 
     //Sensor getters
@@ -120,11 +81,8 @@ public class MqttSensorServiceCustom extends Service {
         return new CustomSensorReader(this, mqttConfButton);
     }
 
-
-
     //Binding
     private IBinder binder = new LocalBinder();
-
 
 
     class LocalBinder extends Binder {
@@ -138,20 +96,8 @@ public class MqttSensorServiceCustom extends Service {
         return binder;
     }
 
-    //Methods used in button listeners
-    public boolean ToggleManualStreamFlag() {
-        this.flagManual.notSoFinalBoolean = !this.flagManual.notSoFinalBoolean;
-        return this.flagManual.notSoFinalBoolean;
-    }
-
-
-    public void Create5sMarker() {
-        this.marker5s.notSoFinalBoolean = true;
-    }
-
-
     public void handleCustomJob(MqttConfButton mqttConfButton) {
-        if(this.customButtons.get(mqttConfButton.getButtonId()) != null) {
+        if (this.customButtons.get(mqttConfButton.getButtonId()) != null) {
             EffectivelyFinalBooleanBox effbb = this.customButtons.get(mqttConfButton.getButtonId());
             effbb.notSoFinalBoolean = true;
             this.customButtons.put(mqttConfButton.getButtonId(), effbb);

@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +31,6 @@ import java.util.Date;
 public class Light extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener, Supplier<String> {
 
-    private Sensor defaultSensor;
-    private SensorManager sensorManager;
     private float ligthValue;
     private int id;
 
@@ -163,23 +159,6 @@ public class Light extends AppCompatActivity
         return Float.toString(ligthValue);
     }
 
-    //LISTENERS
-    public void onManual(View view) {
-        Button button = (Button) view;
-
-        if (mService.ToggleManualStreamFlag()) {
-            button.setText("Stop");
-        } else {
-            button.setText("Start");
-        }
-    }
-
-    public void on5Second(View view) {
-        mService.Create5sMarker();
-        Toast.makeText(this, "Sent last 5s to server", Toast.LENGTH_SHORT).show();
-    }
-
-
     //Service bindings
     MqttSensorServiceCustom mService;
     boolean mBound = false;
@@ -200,8 +179,6 @@ public class Light extends AppCompatActivity
         if (mBound) {
             unbindService(mConnection);
             mBound = false;
-
-
         }
     }
 
