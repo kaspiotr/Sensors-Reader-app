@@ -1,6 +1,8 @@
 package com.example.bck.sensorsreader.configuration;
 
-public class ApplicationConfig {
+import java.io.Serializable;
+
+public class ApplicationConfig implements Serializable {
 
     public static ApplicationConfig defaultConfig = new ApplicationConfig();
 

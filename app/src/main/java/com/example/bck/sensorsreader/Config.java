@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.bck.sensorsreader.configuration.ApplicationConfig;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class Config extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,7 +69,8 @@ public class Config extends AppCompatActivity implements NavigationView.OnNaviga
         Spinner magnetSpinner = findViewById(R.id.magnetometerUnits);
         Spinner proxSpinner = findViewById(R.id.proximityUnits);
 
-        ArrayAdapter<TimeUnit> timeUnits = new ArrayAdapter<TimeUnit>(this, android.R.layout.simple_spinner_item, TimeUnit.values());
+        ArrayAdapter<TimeUnit> timeUnits = new ArrayAdapter<TimeUnit>(this, android.R.layout.simple_spinner_item,
+                Arrays.copyOfRange(TimeUnit.values(), 2, 6));
 
         lightSpinner.setAdapter(timeUnits);
         accSpinner.setAdapter(timeUnits);

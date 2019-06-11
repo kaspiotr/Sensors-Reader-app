@@ -1,6 +1,7 @@
 package com.example.bck.sensorsreader;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -18,8 +19,10 @@ import org.apache.edgent.topology.TStream;
 import org.apache.edgent.topology.Topology;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +38,7 @@ public class MqttSensorService extends Service {
     private AccelerometerSensor accelerometerSensor;
     private MagnetometerSensor magnetometerSensor;
     private ProximitySensor proximitySensor;
+    private final String configFilename = "config.cfg";
 
 
     @Override
@@ -48,28 +52,42 @@ public class MqttSensorService extends Service {
         lightSensor = new LightSensor(this);
         magnetometerSensor = new MagnetometerSensor(this);
         accelerometerSensor = new AccelerometerSensor(this);
-        this.config = readConfig();
-
+        proximitySensor = new ProximitySensor(this);
+        this.config = readConfigFromFile();
+        toggleSensors();
         Log.i("Mqtt", "started service");
         startJob();
         return START_STICKY;
     }
 
-    private ApplicationConfig readConfig() {
-
+    private ApplicationConfig readConfigFromFile() {
         try {
-            FileInputStream fis = getApplicationContext().openFileInput("config.cfg");
+            FileInputStream fis = getApplicationContext().openFileInput(configFilename);
             ObjectInputStream is = new ObjectInputStream(fis);
             ApplicationConfig config = (ApplicationConfig) is.readObject();
             is.close();
             fis.close();
             return config;
         } catch (IOException | ClassNotFoundException e) {
-            Log.w("Config", "Error reading config file faling back to default");
+            Log.w("Config", "Error reading config file falling back to default");
+            e.printStackTrace();
             return ApplicationConfig.defaultConfig;
         }
     }
 
+
+    private void saveConfigToFile() {
+        try {
+            FileOutputStream fos = getApplicationContext().openFileOutput(configFilename, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(config);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
 
     private void stopJob() {
         try {
@@ -114,6 +132,7 @@ public class MqttSensorService extends Service {
         TStream<String> accStream = accelerometerStream(topology);
         TStream<String> lightStream = lightStream(topology);
         TStream<String> magStream = magnetometerStream(topology);
+        TStream<String> proxStream = proximityStream(topology);
 
         MqttConfig mqttConfig = MqttConfig.fromProperties(props);
         MqttStreams mqqtStreams = new MqttStreams(topology, () -> mqttConfig);
@@ -121,20 +140,21 @@ public class MqttSensorService extends Service {
         mqqtStreams.publish(accStream, props.getProperty("mqtt.accTopic"), 0, false);
         mqqtStreams.publish(lightStream, props.getProperty("mqtt.lightTopic"), 0, false);
         mqqtStreams.publish(magStream, props.getProperty("mqtt.magTopic"), 0, false);
+        mqqtStreams.publish(proxStream, props.getProperty("mqtt.proxTopic"), 0, false);
 
         return topology;
     }
 
     private boolean checkIfValid(float[] x, SensorConfig config) {
-        return config.mqttActive &&
-                (x[0] > config.minValue || x[0] < config.maxValue ||
-                        x[1] > config.minValue || x[1] < config.maxValue ||
-                        x[2] > config.minValue || x[2] < config.maxValue);
+        return config.mqttActive && config.active &&
+                (x[0] > config.minValue && x[0] < config.maxValue ||
+                        x[1] > config.minValue && x[1] < config.maxValue ||
+                        x[2] > config.minValue && x[2] < config.maxValue);
     }
 
     private boolean checkIfValid(float x, SensorConfig config) {
-        return config.mqttActive &&
-                (x > config.minValue || x < config.maxValue);
+        return config.mqttActive && config.active &&
+                (x > config.minValue && x < config.maxValue);
     }
 
 
@@ -155,16 +175,46 @@ public class MqttSensorService extends Service {
 
     private TStream<String> lightStream(Topology topology) {
         return topology.poll(lightSensor, config.lightConfig.mqttFrequency, config.lightConfig.mqttFrequencyUnit)
-                .filter(x -> checkIfValid(x, config.magnetometerConfig))
+                .filter(x -> checkIfValid(x, config.lightConfig))
                 .map(x -> String.format(Locale.US, "Light: %f", x));
+    }
 
+    private TStream<String> proximityStream(Topology topology) {
+        return topology.poll(proximitySensor, config.proximityConfig.mqttFrequency, config.proximityConfig.mqttFrequencyUnit)
+                .filter(x -> checkIfValid(x, config.proximityConfig))
+                .map(x -> String.format(Locale.US, "Proximity: %f", x));
     }
 
     //CONFIG
     public void changeConfig(ApplicationConfig config) {
         this.config = config;
+        saveConfigToFile();
+        toggleSensors();
         stopJob();
         startJob();
+
+    }
+
+    private void toggleSensors() {
+        if (config.lightConfig.active)
+            lightSensor.register();
+        else
+            lightSensor.unregister();
+
+        if (config.accelerometerConfig.active)
+            accelerometerSensor.register();
+        else
+            accelerometerSensor.unregister();
+
+        if (config.magnetometerConfig.active)
+            magnetometerSensor.register();
+        else
+            magnetometerSensor.unregister();
+
+        if (config.proximityConfig.active)
+            proximitySensor.register();
+        else
+            proximitySensor.unregister();
     }
 
     //Binding
@@ -188,21 +238,8 @@ public class MqttSensorService extends Service {
         return this.flagManual.notSoFinalBoolean;
     }
 
-
     public void Create5sMarker() {
         this.marker5s.notSoFinalBoolean = true;
-    }
-
-    public void SetConfig(ApplicationConfig config) {
-        this.config = config;
-        stopJob();
-        try {
-            startNewJob();
-        } catch (IOException e) {
-            Log.e("Mqtt", "properties read failure", e);
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e("Mqtt", "Job get fail", e);
-        }
     }
 
 

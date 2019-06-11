@@ -4,9 +4,10 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class SensorConfig {
+public class SensorConfig implements Serializable {
 
     public boolean active;
     public boolean mqttActive;
