@@ -8,19 +8,6 @@
     tools:context=".Light"
     tools:showIn="@layout/app_bar_light">
 
-    <TextView
-        android:id="@+id/light_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="150dp"
-        android:gravity="center"
-        android:text="@string/light"
-        tools:ignore="MissingConstraints"
-        tools:laysout_editor_absoluteX="162dp"
-        tools:laysout_editor_absoluteY="246dp" />
-
     <LinearLayout
         android:id="@+id/rootContainer"
         android:layout_width="match_parent"
@@ -32,42 +19,17 @@
 
 
     <Button
-        android:id="@+id/tag2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:onClick="on5Second"
-        android:text="Tag 2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tag1"
-        app:layout_constraintTop_toTopOf="@+id/tag1" />
-
-    <Button
         android:id="@+id/owntag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="80dp"
         android:onClick="createNewConfiguration"
         android:text="Create own tag"
-        app:layout_constraintEnd_toStartOf="@+id/tag2"
-        app:layout_constraintHorizontal_bias="0.201"
-        app:layout_constraintStart_toEndOf="@+id/tag1"
-        app:layout_constraintStart_toStartOf="@+id/tag1"
-        app:layout_constraintTop_toTopOf="@+id/tag2" />
-
-    <Button
-        android:id="@+id/tag1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="96dp"
-        android:onClick="onManual"
-        android:text="Start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tag2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintBottom_toBottomOf="@+id/rootContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -36,7 +36,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="Light"/>
+            android:text="Light" />
+
+        <CheckBox
+            android:id="@+id/proxCheckbox"
+
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Proximity" />
 
         <CheckBox
             android:id="@+id/magnCheckbox"
@@ -44,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="Magnetometer"/>
+            android:text="Magnetometer" />
 
         <CheckBox
             android:id="@+id/accCheckbox"
@@ -52,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="Accelerometer"/>
+            android:text="Accelerometer" />
 
         <LinearLayout
             android:layout_width="wrap_content"

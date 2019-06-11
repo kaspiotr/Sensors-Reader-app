@@ -11,6 +11,7 @@ public class MqttConfButton {
     private boolean useLight;
     private boolean useAcc;
     private boolean useMag;
+    private boolean useProx;
 
 
     public MqttConfButton(View popupView, int buttonId) {
@@ -22,6 +23,7 @@ public class MqttConfButton {
         this.useLight = ((CheckBox) popupView.findViewById(R.id.lightCheckbox)).isChecked();
         this.useAcc = ((CheckBox) popupView.findViewById(R.id.accCheckbox)).isChecked();
         this.useMag = ((CheckBox) popupView.findViewById(R.id.magnCheckbox)).isChecked();
+        this.useProx = ((CheckBox) popupView.findViewById(R.id.proxCheckbox)).isChecked();
     }
 
     public String getButtonText() {
@@ -46,6 +48,10 @@ public class MqttConfButton {
 
     public boolean isUseMag() {
         return useMag;
+    }
+
+    public boolean isUseProx() {
+        return useProx;
     }
 }
 
