@@ -64,6 +64,11 @@ public class Config extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent = new Intent(this, MqttSensorService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void setConfig(ApplicationConfig config) {
         Spinner lightSpinner = findViewById(R.id.lightUnits);
         Spinner accSpinner = findViewById(R.id.accelerometerUnits);
         Spinner magnetSpinner = findViewById(R.id.magnetometerUnits);
@@ -77,8 +82,36 @@ public class Config extends AppCompatActivity implements NavigationView.OnNaviga
         proxSpinner.setAdapter(timeUnits);
         magnetSpinner.setAdapter(timeUnits);
 
-        Intent intent = new Intent(this, MqttSensorService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        lightSpinner.setSelection(config.lightConfig.mqttFrequencyUnit.ordinal() - 2);
+        accSpinner.setSelection(config.accelerometerConfig.mqttFrequencyUnit.ordinal() - 2);
+        proxSpinner.setSelection(config.proximityConfig.mqttFrequencyUnit.ordinal() - 2);
+        magnetSpinner.setSelection(config.magnetometerConfig.mqttFrequencyUnit.ordinal() - 2);
+
+
+        ((TextView ) findViewById(R.id.accelerometerFreqValue)).setText(Long.toString(config.accelerometerConfig.mqttFrequency));
+        ((TextView ) findViewById(R.id.magnetometerFreqValue)).setText(Long.toString(config.magnetometerConfig.mqttFrequency));
+        ((TextView ) findViewById(R.id.proximityFreqValue)).setText(Long.toString(config.proximityConfig.mqttFrequency));
+        ((TextView ) findViewById(R.id.lightFreqValue)).setText(Long.toString(config.lightConfig.mqttFrequency));
+
+        ((Switch ) findViewById(R.id.accelerometerMqttActive)).setChecked(config.accelerometerConfig.mqttActive);
+        ((Switch ) findViewById(R.id.magnetometerMqttActive)).setChecked(config.magnetometerConfig.mqttActive);
+        ((Switch ) findViewById(R.id.proximityMqttActive)).setChecked(config.proximityConfig.mqttActive);
+        ((Switch ) findViewById(R.id.lightMqttActive)).setChecked(config.lightConfig.mqttActive);
+
+        ((Switch ) findViewById(R.id.accelerometerActive)).setChecked(config.accelerometerConfig.active);
+        ((Switch ) findViewById(R.id.magnetometerActive)).setChecked(config.magnetometerConfig.active);
+        ((Switch ) findViewById(R.id.proximityActive)).setChecked(config.proximityConfig.active);
+        ((Switch ) findViewById(R.id.lightActive)).setChecked(config.lightConfig.active);
+
+        ((TextView ) findViewById(R.id.accelerometerMin)).setText(Double.toString(config.accelerometerConfig.minValue));
+        ((TextView ) findViewById(R.id.magnetometerMin)).setText(Double.toString(config.magnetometerConfig.minValue));
+        ((TextView ) findViewById(R.id.proximityMin)).setText(Double.toString(config.proximityConfig.minValue));
+        ((TextView ) findViewById(R.id.lightMin)).setText(Double.toString(config.lightConfig.minValue));
+
+        ((TextView ) findViewById(R.id.accelerometerMax)).setText(Double.toString(config.accelerometerConfig.maxValue));
+        ((TextView ) findViewById(R.id.magnetometerMax)).setText(Double.toString(config.magnetometerConfig.maxValue));
+        ((TextView ) findViewById(R.id.proximityMax)).setText(Double.toString(config.proximityConfig.maxValue));
+        ((TextView ) findViewById(R.id.lightMax)).setText(Double.toString(config.lightConfig.maxValue));
     }
 
     @Override
@@ -221,6 +254,7 @@ public class Config extends AppCompatActivity implements NavigationView.OnNaviga
             MqttSensorService.LocalBinder binder = (MqttSensorService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+            setConfig(mService.getConfig());
         }
 
         @Override

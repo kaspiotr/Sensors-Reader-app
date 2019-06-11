@@ -186,6 +186,11 @@ public class MqttSensorService extends Service {
     }
 
     //CONFIG
+    public ApplicationConfig getConfig() {
+        return this.config;
+    }
+
+
     public void changeConfig(ApplicationConfig config) {
         this.config = config;
         saveConfigToFile();
