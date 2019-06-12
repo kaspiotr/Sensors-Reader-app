@@ -3,8 +3,8 @@
     package="com.example.bck.sensorsreader">
 
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -25,8 +25,16 @@
         </activity>
         <activity
             android:name=".Accelerometer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_accelerometer"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Magnetometer"
             android:label="@string/title_activity_magnetometer"
@@ -38,13 +46,18 @@
         <activity
             android:name=".Proximity"
             android:label="@string/title_activity_proximity"
-        android:theme="@style/AppTheme.NoActionBar"></activity>
-        <service android:name=".MqttSensorServiceCustom" android:exported="false"/>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <service
+            android:name=".MqttSensorServiceCustom"
+            android:exported="false" />
         <activity
             android:name=".Config"
             android:label="@string/title_activity_config"
             android:theme="@style/AppTheme.NoActionBar" />
-        <service android:name="MqttSensorService" android:exported="false"/>
+        <service
+            android:name="MqttSensorService"
+            android:exported="false" />
     </application>
 
 </manifest>
