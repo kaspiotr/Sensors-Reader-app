@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Config"
+    tools:showIn="@layout/app_bar_config">
+
+    <EditText
+        android:id="@+id/lightMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toStartOf="@+id/lightMax"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/lightLimitLabel"
+        app:layout_constraintTop_toTopOf="@+id/lightLimitLabel" />
+
+    <EditText
+        android:id="@+id/lightMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toEndOf="@+id/lightUnits"
+        app:layout_constraintEnd_toStartOf="@+id/proximityLimitLabel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lightMin"
+        app:layout_constraintTop_toTopOf="@+id/lightMin" />
+
+    <EditText
+        android:id="@+id/proximityMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toStartOf="@+id/proximityMax"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/proximityLimitLabel"
+        app:layout_constraintTop_toTopOf="@+id/proximityLimitLabel" />
+
+    <EditText
+        android:id="@+id/proximityMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/proximityMin"
+        app:layout_constraintTop_toTopOf="@+id/proximityMin" />
+
+    <EditText
+        android:id="@+id/magnetometerMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toStartOf="@+id/magnetometerMax"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/magnetometerLimitLabel"
+        app:layout_constraintTop_toTopOf="@+id/magnetometerLimitLabel" />
+
+    <EditText
+        android:id="@+id/magnetometerMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:ems="10"
+        android:inputType="numberSigned|number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/magnetometerMin"
+        app:layout_constraintTop_toTopOf="@+id/magnetometerMin" />
+
+    <TextView
+        android:id="@+id/light_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Light"
+        app:layout_constraintEnd_toStartOf="@+id/proxLabel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/proxLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Proximity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/light_label"
+        app:layout_constraintTop_toTopOf="@+id/light_label" />
+
+    <TextView
+        android:id="@+id/accelerometerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="308dp"
+        android:text="Accelerometer"
+        app:layout_constraintStart_toStartOf="@+id/light_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/magnetometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Magnetometer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/accelerometerLabel" />
+
+    <Switch
+        android:id="@+id/lightActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Active"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintStart_toStartOf="@+id/light_label"
+        app:layout_constraintTop_toBottomOf="@+id/light_label" />
+
+    <Switch
+        android:id="@+id/magnetometerActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:text="Active"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintEnd_toStartOf="@+id/magnetometerMqttActive"
+        app:layout_constraintTop_toTopOf="@+id/magnetometerMqttActive" />
+
+    <Switch
+        android:id="@+id/magnetometerMqttActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Mqtt"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magnetometer" />
+
+    <Switch
+        android:id="@+id/accelerometerMqttActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Mqtt"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintStart_toEndOf="@+id/lightActive"
+        app:layout_constraintTop_toTopOf="@+id/accelerometerActive" />
+
+    <Switch
+        android:id="@+id/accelerometerActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Active"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintStart_toStartOf="@+id/accelerometerLabel"
+        app:layout_constraintTop_toBottomOf="@+id/accelerometerLabel" />
+
+    <Switch
+        android:id="@+id/lightMqttActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Mqtt"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintStart_toEndOf="@+id/lightActive"
+        app:layout_constraintTop_toTopOf="@+id/lightActive" />
+
+    <Switch
+        android:id="@+id/proximityActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:text="Active"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintEnd_toStartOf="@+id/proximityMqttActive"
+        app:layout_constraintTop_toBottomOf="@+id/proxLabel" />
+
+    <Switch
+        android:id="@+id/proximityMqttActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Mqtt"
+        android:textOff="off"
+        android:textOn="on"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/proxLabel" />
+
+    <TextView
+        android:id="@+id/lightFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Frequency"
+        app:layout_constraintStart_toStartOf="@+id/lightActive"
+        app:layout_constraintTop_toBottomOf="@+id/lightActive" />
+
+    <TextView
+        android:id="@+id/magnetometerFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Frequency"
+        app:layout_constraintEnd_toStartOf="@+id/magnetometerFreqValue"
+        app:layout_constraintTop_toBottomOf="@+id/magnetometerActive" />
+
+    <TextView
+        android:id="@+id/proximityFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Frequency"
+        app:layout_constraintEnd_toStartOf="@+id/proximityFreqValue"
+        app:layout_constraintTop_toTopOf="@+id/proximityFreqValue" />
+
+    <TextView
+        android:id="@+id/accelerometerFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Frequency"
+        app:layout_constraintStart_toStartOf="@+id/accelerometerActive"
+        app:layout_constraintTop_toBottomOf="@+id/accelerometerActive" />
+
+    <EditText
+        android:id="@+id/lightFreqValue"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/lightActive"
+        app:layout_constraintTop_toTopOf="@+id/lightFreq" />
+
+    <EditText
+        android:id="@+id/magnetometerFreqValue"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/magnetometerFreq" />
+
+    <EditText
+        android:id="@+id/proximityFreqValue"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/proximityMqttActive" />
+
+    <EditText
+        android:id="@+id/accelerometerFreqValue"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/accelerometerFreq"
+        app:layout_constraintTop_toTopOf="@+id/accelerometerFreq" />
+
+    <EditText
+        android:id="@+id/accelerometerMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toStartOf="@+id/accelerometerMax"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/accelerometerLimitLabel"
+        app:layout_constraintTop_toTopOf="@+id/accelerometerLimitLabel" />
+
+    <EditText
+        android:id="@+id/accelerometerMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="@+id/accelerometerUnits"
+        app:layout_constraintEnd_toStartOf="@+id/magnetometerLimitLabel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/accelerometerMin"
+        app:layout_constraintTop_toTopOf="@+id/accelerometerLimitLabel" />
+
+    <Spinner
+        android:id="@+id/lightUnits"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/lightFreqValue"
+        app:layout_constraintStart_toStartOf="@+id/lightFreq"
+        app:layout_constraintTop_toBottomOf="@+id/lightFreqValue" />
+
+    <Spinner
+        android:id="@+id/accelerometerUnits"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/accelerometerFreqValue"
+        app:layout_constraintStart_toStartOf="@+id/accelerometerFreq"
+        app:layout_constraintTop_toBottomOf="@+id/accelerometerFreqValue" />
+
+    <Spinner
+        android:id="@+id/proximityUnits"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/proximityFreqValue"
+        app:layout_constraintStart_toStartOf="@+id/proximityFreq"
+        app:layout_constraintTop_toBottomOf="@+id/proximityFreqValue" />
+
+    <Spinner
+        android:id="@+id/magnetometerUnits"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/magnetometerFreqValue"
+        app:layout_constraintStart_toStartOf="@+id/magnetometerFreq"
+        app:layout_constraintTop_toBottomOf="@+id/magnetometerFreqValue" />
+
+    <TextView
+        android:id="@+id/lightLimitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Limits"
+        app:layout_constraintStart_toStartOf="@+id/lightUnits"
+        app:layout_constraintTop_toBottomOf="@+id/lightUnits" />
+
+    <TextView
+        android:id="@+id/proximityLimitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Limits"
+        app:layout_constraintStart_toStartOf="@+id/proximityUnits"
+        app:layout_constraintTop_toBottomOf="@+id/proximityUnits" />
+
+    <TextView
+        android:id="@+id/magnetometerLimitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Limits"
+        app:layout_constraintStart_toStartOf="@+id/magnetometerUnits"
+        app:layout_constraintTop_toBottomOf="@+id/magnetometerUnits" />
+
+    <TextView
+        android:id="@+id/accelerometerLimitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Limits"
+        app:layout_constraintStart_toStartOf="@+id/accelerometerUnits"
+        app:layout_constraintTop_toBottomOf="@+id/accelerometerUnits" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:onClick="SaveConfig"
+        android:text="Save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accelerometerMin" />
+
+</android.support.constraint.ConstraintLayout>

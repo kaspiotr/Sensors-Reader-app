@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="#62def8"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/conf_button_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:hint="Button name" />
+
+        <EditText
+            android:id="@+id/conf_seconds"
+            android:inputType="number"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:hint="Seconds for batch" />
+
+        <CheckBox
+            android:id="@+id/lightCheckbox"
+
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Light" />
+
+        <CheckBox
+            android:id="@+id/proxCheckbox"
+
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Proximity" />
+
+        <CheckBox
+            android:id="@+id/magnCheckbox"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Magnetometer" />
+
+        <CheckBox
+            android:id="@+id/accCheckbox"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Accelerometer" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:text="Save"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_no"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:clickable="true"
+                android:text="Cancel"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+

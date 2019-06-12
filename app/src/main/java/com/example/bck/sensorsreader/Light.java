@@ -7,12 +7,9 @@ import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,8 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.edgent.function.Supplier;
@@ -33,9 +28,8 @@ import java.util.Date;
 public class Light extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener, Supplier<String> {
 
-    private Sensor defaultSensor;
-    private SensorManager sensorManager;
     private float ligthValue;
+    private int id;
 
 
     @Override
@@ -45,14 +39,6 @@ public class Light extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,6 +111,10 @@ public class Light extends AppCompatActivity
                 Intent proximityIntent = new Intent(Light.this, Proximity.class);
                 startActivity(proximityIntent);
                 break;
+            case R.id.nav_config:
+                Intent configIntent = new Intent(Light.this, Config.class);
+                startActivity(configIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,8 +133,6 @@ public class Light extends AppCompatActivity
                     .append("value: ")
                     .append(event.values[0])
                     .append("\n");
-            TextView textView = findViewById(R.id.light_text_view);
-            textView.setText(buffer);
         }
     }
 
@@ -158,25 +146,8 @@ public class Light extends AppCompatActivity
         return Float.toString(ligthValue);
     }
 
-    //LISTENERS
-    public void onManual(View view) {
-        Button button = (Button) view;
-
-        if (mService.ToggleManualStreamFlag()) {
-            button.setText("Stop");
-        } else {
-            button.setText("Start");
-        }
-    }
-
-    public void on5Second(View view) {
-        mService.Create5sMarker();
-        Toast.makeText(this, "Sent last 5s to server", Toast.LENGTH_SHORT).show();
-    }
-
-
     //Service bindings
-    MqttSensorService mService;
+    MqttSensorServiceCustom mService;
     boolean mBound = false;
 
 
@@ -184,7 +155,7 @@ public class Light extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         // Bind to LocalService
-        Intent intent = new Intent(this, MqttSensorService.class);
+        Intent intent = new Intent(this, MqttSensorServiceCustom.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -195,8 +166,6 @@ public class Light extends AppCompatActivity
         if (mBound) {
             unbindService(mConnection);
             mBound = false;
-
-
         }
     }
 
@@ -205,7 +174,7 @@ public class Light extends AppCompatActivity
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            MqttSensorService.LocalBinder binder = (MqttSensorService.LocalBinder) service;
+            MqttSensorServiceCustom.LocalBinder binder = (MqttSensorServiceCustom.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
         }
@@ -215,5 +184,18 @@ public class Light extends AppCompatActivity
             mBound = false;
         }
     };
+
+    //CustomConfiguration
+    public void createNewConfiguration(View view) {
+        CustomButtonConfigurationPopup customButtonConfigurationPopup = new CustomButtonConfigurationPopup(this, view, this::customButtonClickListener);
+        id++;
+        customButtonConfigurationPopup.showWindow(id);
+    }
+
+
+    public void customButtonClickListener(MqttConfButton mqttConfButton) {
+        mService.handleCustomJob(mqttConfButton);
+        Toast.makeText(this, "Sent last " + mqttConfButton.getSeconds() + " seconds to server", Toast.LENGTH_SHORT).show();
+    }
 }
 

@@ -46,11 +46,11 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        Intent mqttSensorServiceStartIntentCustom = new Intent(this, MqttSensorServiceCustom.class);
+        startService(mqttSensorServiceStartIntentCustom);
+
         Intent mqttSensorServiceStartIntent = new Intent(this, MqttSensorService.class);
         startService(mqttSensorServiceStartIntent);
-
-
-
     }
 
     @Override
@@ -111,6 +111,10 @@ public class Home extends AppCompatActivity
             case R.id.nav_proximity:
                 Intent proximityIntent = new Intent(Home.this, Proximity.class);
                 startActivity(proximityIntent);
+                break;
+            case R.id.nav_config:
+                Intent configIntent = new Intent(Home.this, Config.class);
+                startActivity(configIntent);
                 break;
         }
 

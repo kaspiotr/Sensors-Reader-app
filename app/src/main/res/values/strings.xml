@@ -16,4 +16,5 @@
     <string name="title_activity_proximity">Proximity</string>
     <string name="home">Home</string>
     <string name="proximity">Proximity</string>
+    <string name="title_activity_config">Config</string>
 </resources>

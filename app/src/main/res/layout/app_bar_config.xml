@@ -2,9 +2,13 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
+
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Light">
+    android:fitsSystemWindows="true"
+    tools:context=".Config">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,6 +24,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_light" />
+    <include layout="@layout/content_config" />
 
 </android.support.design.widget.CoordinatorLayout>

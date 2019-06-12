@@ -19,7 +19,7 @@
         <item
             android:id="@+id/nav_light"
             android:icon="@drawable/ic_menu_light"
-            android:title="@string/light" />
+            android:title="Buffered Streams" />
         <item
             android:id="@+id/nav_proximity"
             android:icon="@drawable/ic_menu_proximity"
@@ -37,9 +37,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Slideshow" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_config"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Config" />
     </group>
 
     <item android:title="Communicate">
